@@ -70,7 +70,11 @@ construccion de api rest para el challenge para arula latam
  <li>GET /consulta/topico10ordenado</li>
 </ul>
 <p>la aplicacion esta integada con springdocs</p>
+<<<<<<< HEAD
 
+=======
+<img width="437" alt="Captura de pantalla 2024-10-23 163157" src="https://github.com/user-attachments/assets/413e01b3-fea0-41ec-bff0-a6cdd9ac1d87">
+>>>>>>> 792186f365f57f40a8d20ef619824fd20e2572e1
 
 
 
