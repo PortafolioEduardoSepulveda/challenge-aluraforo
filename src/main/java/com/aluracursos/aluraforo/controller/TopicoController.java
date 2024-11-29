@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
 @RestController
@@ -41,10 +42,15 @@ public class TopicoController {
     }
     @GetMapping("/{id}")
     public ResponseEntity<DatosListadoTopico> retornaDatosTopico(@PathVariable Integer id) {
+
         Topico topicoBuscado = new Topico();
         topicoBuscado.setId(id);
         Topico topico = repositorio.encontrarTopico(topicoBuscado);
-        var respuestaTopico = new DatosListadoTopico(topico.getTitulo(),topicoBuscado.getMensaje(),topico.getFechaCreacion(),topico.getStatus(),new DatosUsuario(topico.getUsuario()),topico.getCurso());
+        if(topico == null){
+            throw new ValidacionException("Topico no Existe!");
+        }
+        //var respuestaTopico = new DatosListadoTopico(topico.getTitulo(),topico.getMensaje(),topico.getFechaCreacion(),topico.getStatus(),new DatosUsuario(topico.getUsuario()),topico.getCurso());
+        var respuestaTopico = new DatosListadoTopico(topico.getTitulo(),topico.getMensaje(),topico.getFechaCreacion(),topico.getStatus(),topico.getUsuario().getNombre(),topico.getCurso().getNombre());
         return ResponseEntity.ok(respuestaTopico);
     }
     @PostMapping
@@ -65,11 +71,14 @@ public class TopicoController {
         Topico topico = new Topico();
         topico.setTitulo(datosTopico.titulo());
         topico.setMensaje(datosTopico.mensaje());
-        //topico.setFechaCreacion(datosTopico.fechaCreacion());
+        topico.setFechaCreacion(LocalDateTime.now());
         topico.setStatus("Pendiente");
         topico.setCurso(cursoBuscado);
         topico.setUsuario(usuarioBuscado);
-
+        boolean exiteTopico = repositorio.existeTopicoPorTituloAndMensage(topico.getTitulo(),topico.getMensaje());
+        if(exiteTopico){
+            throw new ValidacionException("El Topico a Ingresar Existe!");
+        }
         Topico topicoRegistrado = repositorio.guardar(topico);
         DatosRespuestaTopico datosRespuestaTopico = new DatosRespuestaTopico(topicoRegistrado.getId(), topicoRegistrado.getTitulo(),topicoRegistrado.getMensaje(),topicoRegistrado.getFechaCreacion(),topicoRegistrado.getStatus());
 

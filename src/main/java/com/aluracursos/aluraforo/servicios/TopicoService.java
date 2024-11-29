@@ -33,6 +33,11 @@ public class TopicoService implements ITopicoService {
     }
 
     @Override
+    public boolean existeTopicoPorTituloAndMensage(String titulo, String mensaje) {
+        return repository.existsByTituloAndMensaje(titulo,mensaje);
+    }
+
+    @Override
     @Transactional
     public Topico guardar(Topico topico) {
         return(repository.save(topico));

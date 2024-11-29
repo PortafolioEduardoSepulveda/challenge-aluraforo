@@ -4,11 +4,13 @@ import com.aluracursos.aluraforo.entidades.DatosUsuario;
 import com.aluracursos.aluraforo.entidades.Respuesta;
 import com.aluracursos.aluraforo.entidades.Topico;
 
+import java.time.LocalDateTime;
+
 
 public record DatosListadoRespuesta(
         Integer id,
         String mensaje,
-        String fechaCreacion,
+        LocalDateTime fechaCreacion,
         int solucion,
         DatosUsuario usuario,
         Topico topico) {

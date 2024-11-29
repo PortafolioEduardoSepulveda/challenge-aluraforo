@@ -19,4 +19,5 @@ public interface TopicoRepository extends JpaRepository<Topico,Integer> {
             join t.curso c where c.nombre = :nombre
             """)
     List<Topico> ListarTopicosCursoNombre(String nombre);
+     boolean existsByTituloAndMensaje(String titulo,String mensaje);
 }

@@ -71,14 +71,26 @@ public class UsuarioController {
     public ResponseEntity<DatosRespuestaUsuario> registrarUsuarioaddperfil(@RequestBody @Valid DatosUsuarioAddPerfil datosUsuario,
                                                                   UriComponentsBuilder uriComponentsBuilder) {
 
+        Boolean existePerfil = false;
         Usuario usuarioBuscar = new Usuario();
         usuarioBuscar.setId(datosUsuario.id_usuario());
         Usuario usuario = repositorio.encontrarUsuario(usuarioBuscar);
-
+        if(usuario == null){
+            throw new ValidacionException("Usuario no Encontrado!");
+        }
         Perfil perfil = new Perfil();
         perfil.setId(datosUsuario.id_perfil());
         Perfil perfilEncontrado = repositorio_perfil.encontrarPerfil(perfil);
+        if(perfilEncontrado == null){
+            throw new ValidacionException("Perfil a ingresar no Encontrado!");
+        }
 
+        for (Perfil p : usuario.getPerfiles()) {
+            if(p.getNombre().equals(perfilEncontrado.getNombre())) existePerfil = true;
+        }
+        if(existePerfil){
+            throw new ValidacionException("Error Perfil ya asignado!");
+        }
         usuario.addPerfil(perfilEncontrado);
 
         Usuario usuarioRegistrado = repositorio.guardar(usuario);
@@ -93,6 +105,9 @@ public class UsuarioController {
         Usuario usuarioBuscar = new Usuario();
         usuarioBuscar.setId(id);
         Usuario usuario = repositorio.encontrarUsuario(usuarioBuscar);
+        if(usuario == null){
+            throw new ValidacionException("Usuario no Encontrado!");
+        }
         var respuestaUsuario = new DatosRespuestaUsuario(usuario.getId(), usuario.getNombre(), usuario.getEmail());
         return ResponseEntity.ok(respuestaUsuario);
     }

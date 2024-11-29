@@ -34,6 +34,9 @@ public class CursoController {
         Curso cursoBuscado = new Curso();
         cursoBuscado.setId(id);
         Curso curso = repositorio.encontrarCurso(cursoBuscado);
+        if(curso == null){
+            throw new ValidacionException("Curso no Existe!");
+        }
         var respuestaPerfil = new DatosRespuestaCurso(curso.getId(), curso.getNombre(),curso.getCategoria());
         return ResponseEntity.ok(respuestaPerfil);
     }

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -45,6 +46,9 @@ public class RespuestaController {
         Respuesta respuestaBuscada = new Respuesta();
         respuestaBuscada.setId(id);
         Respuesta respuesta = repositorio.encontrarRespuesta(respuestaBuscada);
+        if(respuesta == null){
+            throw new ValidacionException("Respuesta no Existe!");
+        }
         var respuestaRespuesta = new DatosListadoRespuesta(respuesta.getId(), respuesta.getMensaje(), respuesta.getFechaCreacion(), respuesta.getSolucion(), new DatosUsuario(respuesta.getUsuario()),respuesta.getTopico());
         return ResponseEntity.ok(respuestaRespuesta);
     }
@@ -65,12 +69,13 @@ public class RespuestaController {
         }
         Respuesta  respuesta = new Respuesta();
         respuesta.setMensaje(datosRespuesta.mensaje());
+        respuesta.setFechaCreacion(LocalDateTime.now());
         respuesta.setSolucion(datosRespuesta.solucion());
         respuesta.setUsuario(usuarioBuscado);
         respuesta.setTopico(topicoBuscado);
 
         Respuesta respuestaRegistrada = repositorio.guardar(respuesta);
-        DatosRespuestaRespuesta datosRespuestaRespuesta = new DatosRespuestaRespuesta(respuestaRegistrada.getId(), respuestaRegistrada.getMensaje(),respuestaRegistrada.getFechaCreacion(), respuestaRegistrada.getSolucion(),respuestaRegistrada.getUsuario(),respuestaRegistrada.getTopico());
+        DatosRespuestaRespuesta datosRespuestaRespuesta = new DatosRespuestaRespuesta(respuestaRegistrada.getId(), respuestaRegistrada.getMensaje(),respuestaRegistrada.getFechaCreacion(), respuestaRegistrada.getSolucion(),new DatosUsuario(respuestaRegistrada.getUsuario()),respuestaRegistrada.getTopico());
 
         URI url = uriComponentsBuilder.path("/respuesta/{id}").buildAndExpand(respuestaRegistrada.getId()).toUri();
         return ResponseEntity.created(url).body(datosRespuestaRespuesta);
@@ -87,7 +92,7 @@ public class RespuestaController {
         }
         respuestaBuscada.actualizarDatos(datosActualizarRespuesta);
         repositorio.guardar(respuestaBuscada);
-        return ResponseEntity.ok(new DatosRespuestaRespuesta(respuestaBuscada.getId(),respuestaBuscada.getMensaje(),respuestaBuscada.getFechaCreacion(),respuestaBuscada.getSolucion(),respuestaBuscada.getUsuario(),respuestaBuscada.getTopico()));
+        return ResponseEntity.ok(new DatosRespuestaRespuesta(respuestaBuscada.getId(),respuestaBuscada.getMensaje(),respuestaBuscada.getFechaCreacion(),respuestaBuscada.getSolucion(),new DatosUsuario(respuestaBuscada.getUsuario()),respuestaBuscada.getTopico()));
     }
 
     @DeleteMapping("/{id}")

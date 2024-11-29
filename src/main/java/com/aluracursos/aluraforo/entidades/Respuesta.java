@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
@@ -18,7 +20,7 @@ public class Respuesta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String mensaje;
-    private String fechaCreacion;
+    private LocalDateTime fechaCreacion;
     private int solucion;
     @ManyToOne
     @JoinColumn(name="id_usuario")

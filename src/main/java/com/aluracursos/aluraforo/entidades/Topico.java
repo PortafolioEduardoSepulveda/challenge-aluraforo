@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -22,7 +23,7 @@ public class Topico {
     private Integer id;
     private String titulo;
     private String mensaje;
-    private String fechaCreacion;
+    private LocalDateTime fechaCreacion;
     private String status;
     @ManyToOne
     @JoinColumn(name="id_curso")

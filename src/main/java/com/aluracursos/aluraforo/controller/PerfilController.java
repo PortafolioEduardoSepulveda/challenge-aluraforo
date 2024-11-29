@@ -37,8 +37,11 @@ public class PerfilController {
     public ResponseEntity<DatosRespuestaPerfil> retornaDatosPerfil(@PathVariable Integer id) {
         Perfil PerfilBuscado = new Perfil();
         PerfilBuscado.setId(id);
-        Perfil usuario = repositorio.encontrarPerfil(PerfilBuscado);
-        var respuestaPerfil = new DatosRespuestaPerfil(usuario.getId(), usuario.getNombre());
+        Perfil perfil = repositorio.encontrarPerfil(PerfilBuscado);
+        if(perfil == null){
+            throw new ValidacionException("Perfil no Existe!");
+        }
+        var respuestaPerfil = new DatosRespuestaPerfil(perfil.getId(), perfil.getNombre());
         return ResponseEntity.ok(respuestaPerfil);
     }
 

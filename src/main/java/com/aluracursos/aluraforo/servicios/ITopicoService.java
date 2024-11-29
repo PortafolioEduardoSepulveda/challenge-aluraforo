@@ -8,7 +8,9 @@ import java.util.List;
 
 public interface ITopicoService {
     public List<Topico> listarTopico();
-    public Page<Topico> listarTopicoPaginado(Pageable paginacion);    public List<Topico> Listat10Tipicos();
+    public Page<Topico> listarTopicoPaginado(Pageable paginacion);
+    public List<Topico> Listat10Tipicos();
+    public boolean existeTopicoPorTituloAndMensage(String titulo,String mensaje);
     public Topico guardar(Topico topico);
     public List<Topico> ListadoTopicosCursoNombre(String nombre);
     public void eliminar(Topico topico);
